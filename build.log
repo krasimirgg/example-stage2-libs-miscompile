@@ -1,0 +1,725 @@
+Sending build context to Docker daemon  81.41kB
+Step 1/21 : FROM ubuntu:focal
+ ---> 20fffa419e3a
+Step 2/21 : RUN apt-get update
+ ---> Using cache
+ ---> 572487e784ad
+Step 3/21 : ARG DEBIAN_FRONTEND=noninteractive
+ ---> Using cache
+ ---> 94fd71a9299b
+Step 4/21 : ENV TZ=Europe/Berlin
+ ---> Using cache
+ ---> 577d157414c3
+Step 5/21 : RUN apt-get install -y   cmake   ninja-build   tzdata   build-essential   curl   git   wget   rsync   python3   gdb   lld
+ ---> Using cache
+ ---> e8a8a810cae2
+Step 6/21 : RUN (git config --global user.email "nobody@example.com")
+ ---> Using cache
+ ---> 1593796e297e
+Step 7/21 : RUN (git config --global user.email "Mister Nobody the Robot")
+ ---> Using cache
+ ---> a3db30257cf0
+Step 8/21 : WORKDIR /example
+ ---> Using cache
+ ---> 80da49c70116
+Step 9/21 : ADD rull.sh /example
+ ---> Using cache
+ ---> 9b15cf5684da
+Step 10/21 : ADD config.toml /example
+ ---> Using cache
+ ---> 62d0e3d40bc4
+Step 11/21 : ADD subtarget_info.patch /example
+ ---> Using cache
+ ---> 26bb0aee247e
+Step 12/21 : ADD run.sh /example
+ ---> Using cache
+ ---> f49b474c241c
+Step 13/21 : ARG RUST_REF=master
+ ---> Using cache
+ ---> 13958a3e38d9
+Step 14/21 : ARG LLVM_REF=6f7e5c0f1ac6cc3349a2e1479ac4208465b272c6
+ ---> Using cache
+ ---> e9b31678aaf0
+Step 15/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --until=rust.cloned)
+ ---> Using cache
+ ---> c766945b6b3b
+Step 16/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --until=rust.submodule_updated)
+ ---> Using cache
+ ---> 8fd373bfe0a5
+Step 17/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --until=llvm.fetched)
+ ---> Using cache
+ ---> 014b5f85ac99
+Step 18/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --until=llvmrust.inited)
+ ---> Using cache
+ ---> c751f640732d
+Step 19/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --until=rust.built)
+ ---> Using cache
+ ---> 0378757a9a87
+Step 20/21 : RUN (./rull.sh --rustrev=$RUST_REF --llvmrev=$LLVM_REF --cmd='python3 x.py build --stage=2 library')
+ ---> Using cache
+ ---> 92cf70f41a37
+Step 21/21 : CMD (cd rust; python3 x.py build --stage=2 library)
+ ---> Using cache
+ ---> 68e89d8b9dca
+Successfully built 68e89d8b9dca
+Successfully tagged stage2-libs-miscompile:latest
+Building bootstrap
+    Finished dev [unoptimized] target(s) in 0.05s
+Building stage0 library artifacts (x86_64-unknown-linux-gnu) 
+    Finished release [optimized] target(s) in 0.15s
+Building compiler artifacts (stage0 -> stage1)
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/PassWrapper.cpp:6:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/PassWrapper.cpp:27:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/RustWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/ArchiveWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/CoverageMappingWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/Linker.cpp:3:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Finished release [optimized] target(s) in 0.25s
+Assembling stage1 compiler
+Building stage1 library artifacts (x86_64-unknown-linux-gnu) 
+    Finished release [optimized] target(s) in 0.13s
+Building compiler artifacts (stage1 -> stage2)
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/PassWrapper.cpp:6:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/PassWrapper.cpp:27:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/RustWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/ArchiveWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/CoverageMappingWrapper.cpp:1:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: In file included from llvm-wrapper/LLVMWrapper.h:18,
+warning:                  from llvm-wrapper/Linker.cpp:3:
+warning: /example/workdir/rust/src/llvm-project/llvm/include/llvm/Support/Host.h:16:5: warning: This header is deprecated, please use llvm/TargetParser/Host.h
+warning:    16 |     "This header is deprecated, please use llvm/TargetParser/Host.h"
+warning:       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Finished release [optimized] target(s) in 0.24s
+Assembling stage2 compiler
+Building stage2 library artifacts (x86_64-unknown-linux-gnu) 
+   Compiling core v0.0.0 (/example/workdir/rust/library/core)
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/num/f32.rs:373:26
+    |
+373 |     pub const MIN: f32 = -3.40282347e+38_f32;
+    |                          ^^^^^^^^^^^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/num/f32.rs:412:35
+    |
+412 |     pub const NEG_INFINITY: f32 = -1.0_f32 / 0.0_f32;
+    |                                   ^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/num/f64.rs:372:26
+    |
+372 |     pub const MIN: f64 = -1.7976931348623157e+308_f64;
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/num/f64.rs:411:35
+    |
+411 |     pub const NEG_INFINITY: f64 = -1.0_f64 / 0.0_f64;
+    |                                   ^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/num/dec2flt/float.rs:107:27
+    |
+107 |     const NEG_NAN: Self = -f32::NAN;
+    |                           ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/num/dec2flt/float.rs:160:27
+    |
+160 |     const NEG_NAN: Self = -f64::NAN;
+    |                           ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `F`
+  --> library/core/src/num/dec2flt/number.rs:80:25
+   |
+80 |                 value = -value;
+   |                         ^^^^^^ cannot apply unary operator `-`
+   |
+help: consider further restricting this bound
+   |
+53 |     pub fn try_fast_path<F: RawFloat + ops::bit::Not>(&self) -> Option<F> {
+   |                                      +++++++++++++++
+
+error[E0600]: cannot apply unary operator `-` to type `F`
+   --> library/core/src/num/dec2flt/parse.rs:242:24
+    |
+242 |     if negative { Some(-float) } else { Some(float) }
+    |                        ^^^^^^ cannot apply unary operator `-`
+    |
+help: consider further restricting this bound
+    |
+200 | pub(crate) fn parse_inf_nan<F: RawFloat + ops::bit::Not>(s: &[u8], negative: bool) -> Option<F> {
+    |                                         +++++++++++++++
+
+error[E0600]: cannot apply unary operator `-` to type `F`
+   --> library/core/src/num/dec2flt/mod.rs:273:17
+    |
+273 |         float = -float;
+    |                 ^^^^^^ cannot apply unary operator `-`
+    |
+help: consider further restricting this bound
+    |
+232 | pub fn dec2flt<F: RawFloat + ops::bit::Not>(s: &str) -> Result<F, ParseFloatError> {
+    |                            +++++++++++++++
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/ops/arith.rs:701:34
+    |
+692 | / macro_rules! neg_impl {
+693 | |     ($($t:ty)*) => ($(
+694 | |         #[stable(feature = "rust1", since = "1.0.0")]
+695 | |         #[rustc_const_unstable(feature = "const_ops", issue = "90080")]
+...   |
+701 | |             fn neg(self) -> $t { -self }
+    | |                                  ^^^^^ cannot apply unary operator `-`
+...   |
+705 | |     )*)
+706 | | }
+    | |_- in this expansion of `neg_impl!`
+707 |
+708 |   neg_impl! { isize i8 i16 i32 i64 i128 f32 f64 }
+    |   ----------------------------------------------- in this macro invocation
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/ops/arith.rs:701:34
+    |
+692 | / macro_rules! neg_impl {
+693 | |     ($($t:ty)*) => ($(
+694 | |         #[stable(feature = "rust1", since = "1.0.0")]
+695 | |         #[rustc_const_unstable(feature = "const_ops", issue = "90080")]
+...   |
+701 | |             fn neg(self) -> $t { -self }
+    | |                                  ^^^^^ cannot apply unary operator `-`
+...   |
+705 | |     )*)
+706 | | }
+    | |_- in this expansion of `neg_impl!`
+707 |
+708 |   neg_impl! { isize i8 i16 i32 i64 i128 f32 f64 }
+    |   ----------------------------------------------- in this macro invocation
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1077:31
+     |
+1077 |     let neg_one = _mm_set1_ps(-1.0);
+     |                               ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1119:34
+     |
+1119 |     let neg_one = _mm256_set1_ps(-1.0);
+     |                                  ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1259:31
+     |
+1259 |     let neg_one = _mm_set1_pd(-1.0);
+     |                               ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1304:34
+     |
+1304 |     let neg_one = _mm256_set1_pd(-1.0);
+     |                                  ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1444:31
+     |
+1444 |     let neg_one = _mm_set1_ps(-1.0);
+     |                               ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1486:31
+     |
+1486 |     let neg_one = _mm_set1_ps(-1.0);
+     |                               ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1626:31
+     |
+1626 |     let neg_one = _mm_set1_pd(-1.0);
+     |                               ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+    --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx2.rs:1671:34
+     |
+1671 |     let neg_one = _mm256_set1_pd(-1.0);
+     |                                  ^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:23634:21
+      |
+23634 |         _mm_set1_ps(-1.),
+      |                     ^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:23647:24
+      |
+23647 |         _mm256_set1_ps(-1.),
+      |                        ^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:23720:34
+      |
+23720 |     simd_shuffle!(a, _mm_set1_pd(-1.), [0, 1, 2, 2, 2, 2, 2, 2])
+      |                                  ^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:23729:37
+      |
+23729 |     simd_shuffle!(a, _mm256_set1_pd(-1.), [0, 1, 2, 3, 4, 4, 4, 4])
+      |                                     ^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33604:24
+      |
+33604 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33623:24
+      |
+33623 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33641:24
+      |
+33641 |         let extractc = -fmsub;
+      |                        ^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33659:24
+      |
+33659 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33678:24
+      |
+33678 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33696:24
+      |
+33696 |         let extractc = -fmsub;
+      |                        ^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33712:24
+      |
+33712 |         let extracta = -fnmadd;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33731:24
+      |
+33731 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33750:24
+      |
+33750 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33767:24
+      |
+33767 |         let extracta = -fnmadd;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33786:24
+      |
+33786 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33805:24
+      |
+33805 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33822:24
+      |
+33822 |         let extracta = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33825:24
+      |
+33825 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33842:24
+      |
+33842 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33845:24
+      |
+33845 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33862:24
+      |
+33862 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33864:24
+      |
+33864 |         let extractc = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33880:24
+      |
+33880 |         let extracta = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33883:24
+      |
+33883 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33900:24
+      |
+33900 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33903:24
+      |
+33903 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33920:24
+      |
+33920 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:33922:24
+      |
+33922 |         let extractc = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:35859:20
+      |
+35859 |     let extractc = -extractc;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:35890:24
+      |
+35890 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:35923:24
+      |
+35923 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:35955:24
+      |
+35955 |         let extractc = -fmsub;
+      |                        ^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:35985:20
+      |
+35985 |     let extractc = -extractc;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36016:24
+      |
+36016 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36049:24
+      |
+36049 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36081:24
+      |
+36081 |         let extractc = -fmsub;
+      |                        ^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36105:20
+      |
+36105 |     let extracta = -extracta;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36136:24
+      |
+36136 |         let extracta = -fnmadd;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36169:24
+      |
+36169 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36202:24
+      |
+36202 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36231:20
+      |
+36231 |     let extracta = -extracta;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36262:24
+      |
+36262 |         let extracta = -fnmadd;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36295:24
+      |
+36295 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36328:24
+      |
+36328 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36353:20
+      |
+36353 |     let extracta = -extracta;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36356:20
+      |
+36356 |     let extractc = -extractc;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36385:24
+      |
+36385 |         let extracta = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36388:24
+      |
+36388 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36419:24
+      |
+36419 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36422:24
+      |
+36422 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36453:24
+      |
+36453 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36455:24
+      |
+36455 |         let extractc = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36483:20
+      |
+36483 |     let extracta = -extracta;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36486:20
+      |
+36486 |     let extractc = -extractc;
+      |                    ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36515:24
+      |
+36515 |         let extracta = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36518:24
+      |
+36518 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36549:24
+      |
+36549 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36552:24
+      |
+36552 |         let extractc = -extractc;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36583:24
+      |
+36583 |         let extracta = -extracta;
+      |                        ^^^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+     --> library/core/src/../../stdarch/crates/core_arch/src/x86/avx512f.rs:36585:24
+      |
+36585 |         let extractc = -fnmsub;
+      |                        ^^^^^^^ cannot apply unary operator `-`
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/../../portable-simd/crates/core_simd/src/elements/float.rs:290:61
+    |
+193 | / macro_rules! impl_trait {
+194 | |     { $($ty:ty { bits: $bits_ty:ty, mask: $mask_ty:ty }),* } => {
+195 | |         $(
+196 | |         impl<const LANES: usize> Sealed for Simd<$ty, LANES>
+...   |
+290 | |                 let sign_bit = sign.to_bits() & Self::splat(-0.).to_bits();
+    | |                                                             ^^^ cannot apply unary operator `-`
+...   |
+354 | |     }
+355 | | }
+    | |_- in this expansion of `impl_trait!`
+356 |
+357 |   impl_trait! { f32 { bits: u32, mask: i32 }, f64 { bits: u64, mask: i64 } }
+    |   -------------------------------------------------------------------------- in this macro invocation
+
+error[E0600]: cannot apply unary operator `-` to type `f32`
+   --> library/core/src/../../portable-simd/crates/core_simd/src/elements/float.rs:291:63
+    |
+193 | / macro_rules! impl_trait {
+194 | |     { $($ty:ty { bits: $bits_ty:ty, mask: $mask_ty:ty }),* } => {
+195 | |         $(
+196 | |         impl<const LANES: usize> Sealed for Simd<$ty, LANES>
+...   |
+291 | |                 let magnitude = self.to_bits() & !Self::splat(-0.).to_bits();
+    | |                                                               ^^^ cannot apply unary operator `-`
+...   |
+354 | |     }
+355 | | }
+    | |_- in this expansion of `impl_trait!`
+356 |
+357 |   impl_trait! { f32 { bits: u32, mask: i32 }, f64 { bits: u64, mask: i64 } }
+    |   -------------------------------------------------------------------------- in this macro invocation
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/../../portable-simd/crates/core_simd/src/elements/float.rs:290:61
+    |
+193 | / macro_rules! impl_trait {
+194 | |     { $($ty:ty { bits: $bits_ty:ty, mask: $mask_ty:ty }),* } => {
+195 | |         $(
+196 | |         impl<const LANES: usize> Sealed for Simd<$ty, LANES>
+...   |
+290 | |                 let sign_bit = sign.to_bits() & Self::splat(-0.).to_bits();
+    | |                                                             ^^^ cannot apply unary operator `-`
+...   |
+354 | |     }
+355 | | }
+    | |_- in this expansion of `impl_trait!`
+356 |
+357 |   impl_trait! { f32 { bits: u32, mask: i32 }, f64 { bits: u64, mask: i64 } }
+    |   -------------------------------------------------------------------------- in this macro invocation
+
+error[E0600]: cannot apply unary operator `-` to type `f64`
+   --> library/core/src/../../portable-simd/crates/core_simd/src/elements/float.rs:291:63
+    |
+193 | / macro_rules! impl_trait {
+194 | |     { $($ty:ty { bits: $bits_ty:ty, mask: $mask_ty:ty }),* } => {
+195 | |         $(
+196 | |         impl<const LANES: usize> Sealed for Simd<$ty, LANES>
+...   |
+291 | |                 let magnitude = self.to_bits() & !Self::splat(-0.).to_bits();
+    | |                                                               ^^^ cannot apply unary operator `-`
+...   |
+354 | |     }
+355 | | }
+    | |_- in this expansion of `impl_trait!`
+356 |
+357 |   impl_trait! { f32 { bits: u32, mask: i32 }, f64 { bits: u64, mask: i64 } }
+    |   -------------------------------------------------------------------------- in this macro invocation
+
+For more information about this error, try `rustc --explain E0600`.
+error: could not compile `core` due to 83 previous errors
+Build completed unsuccessfully in 0:00:15

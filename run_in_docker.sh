@@ -19,4 +19,4 @@ while :; do
 done
 
 docker build "${build_args[@]}" -t "${IMAGE_NAME}" .
-docker run -it "${IMAGE_NAME}" sh -c "cd workdir/rust; python3 x.py build --stage=2 library"
+docker run -it "${IMAGE_NAME}" sh -c "cd workdir/rust; python3 x.py --color=never build --stage=2 library"
