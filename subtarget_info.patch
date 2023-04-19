@@ -1,0 +1,19 @@
+diff --git a/llvm/include/llvm/MC/MCSubtargetInfo.h b/llvm/include/llvm/MC/MCSubtargetInfo.h
+index 943486ac149f..e1ab771086b5 100644
+--- a/llvm/include/llvm/MC/MCSubtargetInfo.h
++++ b/llvm/include/llvm/MC/MCSubtargetInfo.h
+@@ -234,6 +234,14 @@ public:
+     return ProcDesc;
+   }
+ 
++  ArrayRef<SubtargetSubTypeKV> getCPUTable() const {
++    return ProcDesc;
++  }
++
++  ArrayRef<SubtargetFeatureKV> getFeatureTable() const {
++    return ProcFeatures;
++  }
++
+   virtual unsigned getHwMode() const { return 0; }
+ 
+   /// Return the cache size in bytes for the given level of cache.
